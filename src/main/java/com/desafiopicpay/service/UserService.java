@@ -2,6 +2,8 @@ package com.desafiopicpay.service;
 
 import com.desafiopicpay.domain.dtos.UserDto;
 import com.desafiopicpay.domain.users.User;
+import com.desafiopicpay.domain.users.UserType;
+import com.desafiopicpay.exceptions.DoYourExceptions;
 import com.desafiopicpay.mapper.UserDtoToUser;
 import com.desafiopicpay.mapper.UserToUserDto;
 import com.desafiopicpay.repository.UserRepository;
@@ -9,10 +11,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,10 +37,6 @@ public class UserService {
         try {
             User user = mapUserDtoToUser.map(userDTO);
             userRepository.save(user);
-        } catch (DataIntegrityViolationException uniqueValueException) {
-            throw new Exception("A ingresado un valor que no puede ser duplicado. Documento/Email");
-        } catch (HttpMessageNotReadableException valueParserError) {
-            throw new Exception("Ocurrió un error al ingresar uno o mas valores. No coinciden con el tipo de valor requerido.");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -53,5 +53,17 @@ public class UserService {
         }
         return new ArrayList<>() {
         };
+    }
+
+    public void authenticateTransaction(UserDto sender, BigDecimal value){
+        if(sender.userType() == UserType.MERCHANT){
+            throw new DoYourExceptions("El ususario " + UserType.MERCHANT +" no puede realizar transferencias.",
+                    HttpStatus.FORBIDDEN);
+        }
+
+        if(sender.balance().compareTo(value) < 0){
+            throw new DoYourExceptions("El usuario no cuenta con el saldo suficiente para realizar transferencias.",
+                    HttpStatus.FORBIDDEN);
+        }
     }
 }
