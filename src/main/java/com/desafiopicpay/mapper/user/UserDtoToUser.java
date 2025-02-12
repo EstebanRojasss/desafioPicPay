@@ -1,11 +1,12 @@
-package com.desafiopicpay.mapper;
+package com.desafiopicpay.mapper.user;
 
 import com.desafiopicpay.domain.dtos.UserDto;
 import com.desafiopicpay.domain.users.User;
+import com.desafiopicpay.mapper.IMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserDtoToUser implements IMapper<UserDto, User>{
+public class UserDtoToUser implements IMapper<UserDto, User> {
 
     @Override
     public User map(UserDto in) {

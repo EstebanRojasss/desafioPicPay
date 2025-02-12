@@ -4,6 +4,7 @@ import com.desafiopicpay.domain.dtos.TransactionDto;
 import com.desafiopicpay.domain.transactions.Transaction;
 import com.desafiopicpay.domain.users.User;
 import com.desafiopicpay.exceptions.DoYourExceptions;
+import com.desafiopicpay.mapper.transaction.TransactionToTransactionDto;
 import com.desafiopicpay.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,13 +28,15 @@ public class TransactionService {
 
     private final static String AUTH_URI = "https://util.devi.tools/api/v2/authorize";
 
-    public void createTransaction(TransactionDto dtoTransaction) {
+    private final TransactionToTransactionDto mapTransactionToDto;
+
+    public TransactionDto createTransaction(TransactionDto dtoTransaction) {
         User sender = userService.findById(dtoTransaction.sender().getId());
         User receiver = userService.findById(dtoTransaction.receiver().getId());
 
         userService.validateTransaction(sender, sender.getBalance());
 
-        if(!authenticateTransaction()){
+        if (!authenticateTransaction()) {
             throw new DoYourExceptions("Transacción no autorizada.", HttpStatus.FORBIDDEN);
         }
 
@@ -45,15 +48,21 @@ public class TransactionService {
 
         sender.setBalance(sender.getBalance().subtract(dtoTransaction.amount()));
         receiver.setBalance(receiver.getBalance().add(dtoTransaction.amount()));
+
+        return mapTransactionToTransactionDto(transaction);
     }
 
 
     public Boolean authenticateTransaction() {
         ResponseEntity<Map> authResponse = restTemplate.getForEntity(AUTH_URI, Map.class);
-        if(authResponse.getStatusCode() != HttpStatus.OK){
+        if (authResponse.getStatusCode() != HttpStatus.OK) {
             return false;
         }
         return Objects.requireNonNull(authResponse.getBody()).get("authorization") == "true";
+    }
+
+    public TransactionDto mapTransactionToTransactionDto(Transaction transaction) {
+        return mapTransactionToDto.map(transaction);
     }
 
 }
