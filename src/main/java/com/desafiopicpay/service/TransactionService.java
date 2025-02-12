@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,7 @@ public class TransactionService {
 
     private final TransactionToTransactionDto mapTransactionToDto;
 
+    @Transactional
     public TransactionDto createTransaction(TransactionDto dtoTransaction) {
         User sender = userService.findById(dtoTransaction.sender().getId());
         User receiver = userService.findById(dtoTransaction.receiver().getId());

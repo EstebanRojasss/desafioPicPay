@@ -34,6 +34,7 @@ public class UserService {
         try {
             User user = mapUserDtoToUser.map(userDTO);
             userRepository.save(user);
+            log.info("Éxito en la creación del usuario.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -41,6 +42,7 @@ public class UserService {
 
     public List<UserDto> usersList() {
         try {
+            log.info("Iniciacion proceso de listado de usuario.");
             return userRepository.findAll()
                     .stream()
                     .map(mapUserToUserDto::map)
