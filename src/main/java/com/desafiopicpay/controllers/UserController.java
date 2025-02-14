@@ -26,6 +26,7 @@ public class UserController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "201", description = "Éxito en la creación de usuario."),
+                    @ApiResponse(responseCode = "204", description = "Operación exitosa pero el listado no tiene contenido"),
                     @ApiResponse(responseCode = "400", description = "Error en la creacion."),
                     @ApiResponse(responseCode = "500",description = "Error interno del servidor.")
             }
@@ -39,7 +40,7 @@ public class UserController {
     @Operation(description = "Endpoint encargado de listar todos los usuarios.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "Éxito en listar los usuarios."),
+                    @ApiResponse(responseCode = "200", description = "Éxito en listar los usuarios."),
                     @ApiResponse(responseCode = "400", description = "Error en en listado."),
                     @ApiResponse(responseCode = "500",description = "Error interno del servidor.")
             }

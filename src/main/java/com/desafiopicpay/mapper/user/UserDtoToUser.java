@@ -11,7 +11,7 @@ public class UserDtoToUser implements IMapper<UserDto, User> {
     @Override
     public User map(UserDto in) {
         User user = new User();
-        user.setName(in.name());
+        user.setName(in.firstName());
         user.setLastName(in.lastName());
         user.setDocument(in.document());
         user.setEmail(in.email());

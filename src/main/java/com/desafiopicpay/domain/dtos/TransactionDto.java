@@ -7,6 +7,4 @@ import java.math.BigDecimal;
 public record TransactionDto(BigDecimal amount,
                              User sender,
                              User receiver) {
-
-
 }

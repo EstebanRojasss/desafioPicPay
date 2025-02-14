@@ -1,5 +1,6 @@
 package com.desafiopicpay.controllers;
 
+import com.desafiopicpay.domain.dtos.NotificationDto;
 import com.desafiopicpay.domain.dtos.TransactionDto;
 import com.desafiopicpay.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,4 +31,6 @@ public class TransactionController {
     public ResponseEntity<TransactionDto> crearTransaccion(@RequestBody TransactionDto transactionDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.createTransaction(transactionDto));
     }
+
+
 }

@@ -4,21 +4,22 @@ import com.desafiopicpay.domain.users.UserType;
 
 import java.math.BigDecimal;
 
-public record UserDto(String name,
+public record UserDto(String firstName,
                       String lastName,
                       String email,
                       String document,
                       String password,
                       UserType userType,
-                      BigDecimal balance){
+                      BigDecimal balance) {
 
-    public UserDto(String name,
+    public UserDto(String firstName,
                    String lastName,
                    String email,
                    String document,
                    UserType userType,
                    BigDecimal balance) {
-        this(name, lastName, email, document, "", userType, balance);
+        this(firstName, lastName, email, document, "", userType, balance);
     }
 
 }
+
